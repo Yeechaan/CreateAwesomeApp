@@ -20,6 +20,7 @@ public class SplashActivity extends AppCompatActivity {
 
         database = openOrCreateDatabase("book.db", MODE_PRIVATE, null);
 
+
         setDB();
     }
 
