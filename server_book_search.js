@@ -1,4 +1,5 @@
 app.get('/book', function (req, res) {
+  var qs = url.parse(req.url, true).query;
 
   var headers = {
       'Authorization': 'KakaoAK --REST API KEY--
@@ -7,7 +8,7 @@ app.get('/book', function (req, res) {
   var dataString = "query=ø°¿Ã∆Æ]";
 
   var options = {
-    url: 'https://dapi.kakao.com/v3/search/book?',
+    url: 'https://dapi.kakao.com/v3/search/book?target=title',
     method: 'GET',
     headers: headers,
     form: {
@@ -15,14 +16,24 @@ app.get('/book', function (req, res) {
     }
   };
 
-  function callback(error, response, body) {
-    if (!error && response.statusCode == 200) {
-      console.log(body);
-    }
-    console.log(response.statusCode);
+  function callApi(callback) {
+    
+    request(options, function(error, response, body) {
+      if (!error && response.statusCode == 200) {
+        //console.log(JSON.parse(body));
+      }
+      console.log(response.statusCode);
+  
+      return callback(error, body);
+    });
   }
 
-  request(options, callback);
-
-  res.send('Hello World!');
+  callApi(function(error, result){
+    if(error){
+      console.log(error);
+    }
+    else{
+      res.send(JSON.parse(result));
+    }
+  })
 });
