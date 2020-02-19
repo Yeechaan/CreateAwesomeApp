@@ -2,10 +2,10 @@ app.get('/book', function (req, res) {
   var qs = url.parse(req.url, true).query;
 
   var headers = {
-      'Authorization': 'KakaoAK --REST API KEY--
+      'Authorization': 'KakaoAK --REST API KEY--'
   };
 
-  var dataString = "query=ø°¿Ã∆Æ]";
+  var dataString = qs.title;
 
   var options = {
     url: 'https://dapi.kakao.com/v3/search/book?target=title',
@@ -24,16 +24,16 @@ app.get('/book', function (req, res) {
       }
       console.log(response.statusCode);
   
-      return callback(error, body);
+      return callback(error, body, response.statusCode);
     });
   }
 
-  callApi(function(error, result){
-    if(error){
-      console.log(error);
+  callApi(function(error, result, statusCode){
+    if(!error && statusCode == 200){
+      res.send(JSON.parse(result));
     }
     else{
-      res.send(JSON.parse(result));
+      res.send('400');
     }
   })
 });
